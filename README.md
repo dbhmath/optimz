@@ -14,8 +14,8 @@ using .SimplexTabularUtils
 O desde GitHub:
 
 ```julia
-using Pkg
-Pkg.add(url="https://raw.githubusercontent.com/dbhmath/optimz/main/SimplexTabularUtils")
+include(download("https://raw.githubusercontent.com/dbhmath/optimz/main/SimplexTabularUtils.jl"))
+using .SimplexTabularUtils
 ```
 
 ## 📚 Funcionalidades principales
