@@ -284,7 +284,7 @@ Normaliza la fila pivote dividiendo todos sus elementos por el valor del element
 - Si el elemento pivote es cero.
 """
 function normalizar_fila_pivote(tabla::TablaSimplex)
-    println("normalizar fila pivote")
+    #println("Normalizar fila pivote")
     if tabla.pivote_fila == 0 || tabla.pivote_columna == 0
         error("No se ha definido correctamente la fila o columna pivote.")        
     end
@@ -316,7 +316,7 @@ Elimina los valores distintos de cero en la columna pivote, fuera de la fila piv
 - La tabla modificada con ceros en la columna pivote (excepto el pivote).
 """
 function hacer_ceros(tablaS::TablaSimplex)
-    println("hare celos pivote")
+    #println("Hacer ceros")
     if tablaS.pivote_fila == 0 || tablaS.pivote_columna == 0
         error("No se ha definido correctamente la fila o columna pivote.")        
     end
