@@ -215,7 +215,7 @@ function buscar_var_salida(tabla::TablaSimplex)
     #cocientes = [soluciones[i] / columna[i] for i in 1:length(columna) if columna[i] > 0]
     cocientes = []
     indices_validos = []
-    for i in 2:length(columna)
+    for i in 2:lastindex(columna)
         if columna[i] > 0
             push!(cocientes, soluciones[i] / columna[i])
             push!(indices_validos, i)
@@ -431,4 +431,20 @@ function cambiar_fila_z(tabla::TablaSimplex, nombre::String, nueva_fila_z)
     return tabla
 end
 
+export TablaSimplex,
+       ajustar_fila_z,
+       buscar_mas_negativa,
+       buscar_mas_positiva,
+       buscar_var_entrada,
+       buscar_var_salida,
+       cambiar_fila_z,
+       eliminar_columnas,
+       eval,
+       fraccion_latex,
+       hacer_ceros,
+       include,
+       latex_tabla,
+       latex_tabla_float,
+       normalizar_fila_pivote,
+       print_tabla
 end
