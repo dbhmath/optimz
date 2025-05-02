@@ -431,6 +431,62 @@ function cambiar_fila_z(tabla::TablaSimplex, nombre::String, nueva_fila_z)
     return tabla
 end
 
+"""
+    overleaf_tabla(tablaS::TablaSimplex) -> String
+
+Genera representación LaTeX de una tabla simplex para Overleaf/LaTeX, con:
+- Columnas numéricas alineadas a la derecha
+- Formato de fracciones automático
+- Estructura con `toprule`, `midrule` y `bottomrule`
+
+# Argumentos
+- `tablaS::TablaSimplex`: Estructura con:
+  * `columnas`: Nombres columnas (incluye "Sol")
+  * `variables`: Variables base (fila)
+  * `matriz`: Coeficientes (última columna = solución)
+
+# Retorno
+- String con código LaTeX listo para compilar
+"""
+function overleaf_tabla(tablaS::TablaSimplex)
+    # Separar la matriz de los coeficientes y la columna de solución
+    coeficientes = tablaS.matriz[:, 1:end-1]  # Todas las columnas excepto la última
+    solucion = tablaS.matriz[:, end]          # Última columna
+    
+    # Convertir números a fracciones LaTeX
+    coef_frac = fraccion_latex.(rationalize.(coeficientes, tol=1//100))
+    sol_frac = fraccion_latex.(rationalize.(solucion, tol=1//100))
+    
+    # Construir encabezados
+    encabezados = ["Base"; tablaS.columnas[1:end-1]; "Sol"]  # Excluir "Sol" de columnas si ya está
+    
+    # Construir el cuerpo de la tabla
+    cuerpo = []
+    for i in 1:length(tablaS.variables)
+        fila = vcat(tablaS.variables[i], coef_frac[i,:], sol_frac[i])
+        push!(cuerpo, join(fila, " & "))
+    end
+    cuerpo_str = join(cuerpo, " \\\\\n")
+    
+    # Determinar el formato de columnas (c|cccc...|c)
+    num_cols = length(tablaS.columnas)  # Ya incluye Base + variables + Sol
+    formato = "l|" * repeat("r", num_cols-1) * "|r"
+    
+    # Construir el string LaTeX completo
+    latex_str = """
+    \\[
+    \\begin{array}{$formato}
+    \\toprule
+    $(join(encabezados, " & ")) \\\\
+    \\midrule
+    $cuerpo_str \\\\
+    \\bottomrule
+    \\end{array}
+    \\]
+    """    
+    return latex_str
+end
+
 export TablaSimplex,
        ajustar_fila_z,
        buscar_mas_negativa,
@@ -444,5 +500,6 @@ export TablaSimplex,
        latex_tabla,
        latex_tabla_float,
        normalizar_fila_pivote,
-       print_tabla
+       print_tabla,
+       overleaf_tabla
 end
